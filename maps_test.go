@@ -56,3 +56,47 @@ func TestMapFromSlice(t *testing.T) {
 		})
 	})
 }
+
+func TestKeys(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		m := map[string]int{
+			"1": 1,
+			"2": 2,
+		}
+
+		require.ElementsMatch(t, []string{"1", "2"}, Keys(m))
+	})
+}
+
+func TestValues(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		m := map[string]int{
+			"1": 1,
+			"2": 2,
+		}
+
+		require.ElementsMatch(t, []int{1, 2}, Values(m))
+	})
+}
+
+func TestAssign(t *testing.T) {
+	m1 := map[string]int{
+		"A": 1,
+		"B": 2,
+	}
+	m2 := map[string]int{
+		"A": 0,
+		"C": 3,
+	}
+
+	require.Equal(
+		t,
+		map[string]int{
+			"A": 0,
+			"B": 2,
+			"C": 3,
+		},
+		Assign(m1, m2),
+	)
+}
+
