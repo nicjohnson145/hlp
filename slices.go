@@ -1,0 +1,64 @@
+package hlp
+
+// FilterMapErr is like FilterMap, but the callback function can fail. In such a case, a nil slice and the error from
+// the callback is returned. This function fails fast; i.e it stops iteration at the first non-nil error
+func FilterMapErr[T any, R any](collection []T, callback func(item T, index int) (R, bool, error)) ([]R, error) {
+	result := []R{}
+
+	for i, item := range collection {
+		r, ok, err := callback(item, i)
+		if err != nil {
+			return nil, err
+		}
+		if !ok {
+			continue
+		}
+		result = append(result, r)
+	}
+
+	return result, nil
+}
+
+// FilterMap is the combination of Filter & Map, returning the elements from the input slice as transformed by the
+// callback function, but only in cases where the callback function also returns true
+func FilterMap[T any, R any](collection []T, callback func(item T, index int) (R, bool)) []R {
+	result, _ := FilterMapErr[T, R](collection, func(item T, index int) (R, bool, error) {
+		out, ok := callback(item, index)
+		return out, ok, nil
+	})
+	return result
+}
+
+// MapErr is like Map, but the callback function can fail. In such a case, a nil slice and error from the callback is
+// returned. This function fails fast; i.e it stops iteration at the first non-nil error
+func MapErr[T any, R any](collection []T, callback func(item T, index int) (R, error)) ([]R, error) {
+	return FilterMapErr[T, R](collection, func(item T, index int) (R, bool, error) {
+		out, err := callback(item, index)
+		return out, true, err
+	})
+}
+
+// Map returns all elements of the input slice as transformed by the supplied callback function
+func Map[T any, R any](collection []T, callback func(item T, index int) R) []R {
+	out, _ := FilterMapErr[T, R](collection, func(item T, index int) (R, bool, error) {
+		return callback(item, index), true, nil
+	})
+	return out
+}
+
+// FilterErr is like Filter, but the callback function can fail. In such a case, a nil slice and the error from the
+// callback is returned. This function fails fast; i.e it stops iteration at the first non-nil error
+func FilterErr[T any](collection []T, callback func(item T, index int) (bool, error)) ([]T, error) {
+	return FilterMapErr[T, T](collection, func(item T, index int) (T, bool, error) {
+		ok, err := callback(item, index)
+		return item, ok, err
+	})
+}
+
+// Filter returns all elements of the input slice the supplied callback returns true for
+func Filter[T any](collection []T, callback func(item T, index int) bool) []T {
+	out, _ := FilterMapErr[T, T](collection, func(item T, index int) (T, bool, error) {
+		return item, callback(item, index), nil
+	})
+	return out
+}
