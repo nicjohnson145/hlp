@@ -62,3 +62,19 @@ func Filter[T any](collection []T, callback func(item T, index int) bool) []T {
 	})
 	return out
 }
+
+// Flatten consolidates multiple lists into a single conjoined list
+func Flatten[T any](lists ...[]T) []T {
+	combinedLength := 0
+
+	for _, l := range lists {
+		combinedLength += len(l)
+	}
+
+	out := make([]T, 0, combinedLength)
+	for _, l := range lists {
+		out = append(out, l...)
+	}
+
+	return out
+}

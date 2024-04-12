@@ -143,3 +143,14 @@ func TestFilterMapErr(t *testing.T) {
 		require.NoError(t, err)
 	})
 }
+
+func TestFlatten(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		result := Flatten(
+			[]string{"a", "b", "c"},
+			[]string{"d", "e", "f"},
+		)
+
+		require.Equal(t, []string{"a", "b", "c", "d", "e", "f"}, result)
+	})
+}
