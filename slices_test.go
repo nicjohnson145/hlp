@@ -154,3 +154,17 @@ func TestFlatten(t *testing.T) {
 		require.Equal(t, []string{"a", "b", "c", "d", "e", "f"}, result)
 	})
 }
+
+func TestFillFunc(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		results := FillFunc(3, func(i int) int { return i * 3 })
+		require.Equal(t, []int{0, 3, 6}, results)
+	})
+}
+
+func TestFill(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		results := Fill(3, "abc")
+		require.Equal(t, []string{"abc", "abc", "abc"}, results)
+	})
+}

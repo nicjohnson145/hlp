@@ -78,3 +78,18 @@ func Flatten[T any](lists ...[]T) []T {
 
 	return out
 }
+
+// FillFunc creates an array of length `count` using the return value of the supplied generation function
+func FillFunc[T any](count int, genFunc func(int) T) []T {
+	out := make([]T, count)
+	for i := 0; i < count; i++ {
+		out[i] = genFunc(i)
+	}
+
+	return out
+}
+
+// Fill creates an array of length `count` filled with the supplied value
+func Fill[T any](count int, val T) []T {
+	return FillFunc(count, func(i int) T { return val })
+}
