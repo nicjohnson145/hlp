@@ -168,3 +168,19 @@ func TestFill(t *testing.T) {
 		require.Equal(t, []string{"abc", "abc", "abc"}, results)
 	})
 }
+
+func TestBatch(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		results := Batch([]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, 3)
+		require.Equal(
+			t,
+			[][]int{
+				{0, 1, 2},
+				{3, 4, 5},
+				{6, 7, 8},
+				{9},
+			},
+			results,
+		)
+	})
+}

@@ -93,3 +93,15 @@ func FillFunc[T any](count int, genFunc func(int) T) []T {
 func Fill[T any](count int, val T) []T {
 	return FillFunc(count, func(i int) T { return val })
 }
+
+// Batch "chunks" an array into the arrays of the specified size
+// Shamelessly stolen from https://go.dev/wiki/SliceTricks
+func Batch[T any](iter []T, chunk int) [][]T {
+	batches := make([][]T, 0, (len(iter) + chunk - 1) / chunk)
+	for chunk < len(iter) {
+		iter, batches = iter[chunk:], append(batches, iter[0:chunk:chunk])
+	}
+	batches = append(batches, iter)
+
+	return batches
+}
