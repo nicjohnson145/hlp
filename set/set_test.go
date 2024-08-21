@@ -51,4 +51,17 @@ func TestSet(t *testing.T) {
 
 		require.ElementsMatch(t, s.SymmetricDifference(o).AsSlice(), []int{1, 4})
 	})
+	
+	t.Run("iter", func(t *testing.T) {
+		s := New("a", "b", "c")
+		ids := []int{}
+		vals := []string{}
+		for i, val := range s.Iter() {
+			ids = append(ids, i)
+			vals = append(vals, val)
+		}
+
+		require.Equal(t, []int{0, 1, 2}, ids)
+		require.ElementsMatch(t, []string{"a", "b", "c"}, vals)
+	})
 }
