@@ -105,3 +105,15 @@ func Batch[T any](iter []T, chunk int) [][]T {
 
 	return batches
 }
+
+func GroupBy[T any, U comparable](iter []T, keyGen func(item T) U) map[U][]T {
+	result := map[U][]T{}
+
+	for i := range iter {
+		key := keyGen(iter[i])
+
+		result[key] = append(result[key], iter[i])
+	}
+
+	return result
+}

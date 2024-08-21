@@ -184,3 +184,20 @@ func TestBatch(t *testing.T) {
 		)
 	})
 }
+
+func TestGroupBy(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		result := GroupBy([]string{"apple", "amazon", "bravo", "bakery", "cherry", "chocolate"}, func(item string) string {
+			return string(item[0])
+		})
+		require.Equal(
+			t,
+			map[string][]string{
+				"a": {"apple", "amazon"},
+				"b": {"bravo", "bakery"},
+				"c": {"cherry", "chocolate"},
+			},
+			result,
+		)
+	})
+}
