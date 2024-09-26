@@ -201,3 +201,20 @@ func TestGroupBy(t *testing.T) {
 		)
 	})
 }
+
+func TestExtractRange(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		got, err := ExtractRange([]string{"apple", "banana", "cherry", "date", "egg", "fries", "grapes"}, "0,2,5-")
+		require.NoError(t, err)
+		require.Equal(
+			t,
+			[]string{
+				"apple",
+				"cherry", 
+				"fries",
+				"grapes",
+			},
+			got,
+		)
+	})
+}

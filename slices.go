@@ -117,3 +117,18 @@ func GroupBy[T any, U comparable](iter []T, keyGen func(item T) U) map[U][]T {
 
 	return result
 }
+
+// ExtractRange creates a new list with the elements from list, as specified by the range expression
+func ExtractRange[T any](list []T, expr string) ([]T, error) {
+	indexList, err := ParseRange(len(list), expr)
+	if err != nil {
+		return nil, err
+	}
+
+	newList := make([]T, len(indexList))
+	for i, idx := range indexList {
+		newList[i] = list[idx]
+	}
+
+	return newList, nil
+}
