@@ -60,3 +60,14 @@ func Values[K comparable, V any](m map[K]V) []V {
 
 	return out
 }
+
+// Invert swaps keys & values for the given map
+func Invert[K comparable, V comparable](m map[K]V) map[V]K {
+	out := map[V]K{}
+
+	for key, val := range m {
+		out[val] = key
+	}
+
+	return out
+}

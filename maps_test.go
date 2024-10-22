@@ -100,3 +100,13 @@ func TestAssign(t *testing.T) {
 	)
 }
 
+
+func TestInvert(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		require.Equal(
+			t,
+			map[int]string{1: "a", 2: "b"},
+			Invert(map[string]int{"a": 1, "b": 2}),
+		)
+	})
+}
