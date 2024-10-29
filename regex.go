@@ -9,7 +9,7 @@ import (
 func ExtractNamedMatches(exp *regexp.Regexp, submatches []string) map[string]string {
 	result := map[string]string{}
 	for i, name := range exp.SubexpNames() {
-		if i != 0 && name != "" {
+		if i != 0 && name != "" && i < len(submatches){
 			result[name] = submatches[i]
 		}
 	}

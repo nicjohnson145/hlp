@@ -19,4 +19,10 @@ func TestExtractNamedMatches(t *testing.T) {
 			got,
 		)
 	})
+
+	t.Run("no matches", func(t *testing.T) {
+		exp := regexp.MustCompile(`(?P<first>\d+)\.(?P<second>\d+)\.(\d+)`)
+		got := ExtractNamedMatches(exp, exp.FindStringSubmatch("abc.def.ghi"))
+		require.Equal(t, map[string]string{}, got)
+	})
 }
