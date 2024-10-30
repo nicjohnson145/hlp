@@ -6,6 +6,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/jarxorg/wfs v0.3.2
 	github.com/jmoiron/sqlx v1.4.0
+	github.com/psanford/memfs v0.0.0-20241019191636-4ef911798f9b
 	github.com/stretchr/testify v1.8.4
 )
 
