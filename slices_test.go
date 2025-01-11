@@ -234,3 +234,17 @@ func TestAll(t *testing.T) {
 		}))
 	})
 }
+
+func TestFirst(t *testing.T) {
+	t.Run("found", func(t *testing.T) {
+		require.Equal(t, 2, First([]int {1, 3, 4, 6}, func(x int) bool {
+			return x % 2 == 0
+		}))
+	})
+
+	t.Run("not found", func(t *testing.T) {
+		require.Equal(t, -1, First([]int {1, 3, 4, 6}, func(x int) bool {
+			return x > 7
+		}))
+	})
+}

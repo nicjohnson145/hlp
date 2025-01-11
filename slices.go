@@ -154,3 +154,14 @@ func All[T any](list []T, filter func(x T) bool) bool {
 	}
 	return true
 }
+
+// First finds the first element in the list that matchees the filter, returning its index, or -1 on when no filters
+// match
+func First[T any](list []T, filter func(x T) bool) int {
+	for i, elem := range list {
+		if filter(elem) {
+			return i
+		}
+	}
+	return -1
+}

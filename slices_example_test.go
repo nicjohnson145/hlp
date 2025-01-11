@@ -23,3 +23,10 @@ func ExampleAll() {
 	}))
 	// Output: false
 }
+
+func ExampleFirst() {
+	fmt.Println(First([]int{1, 3, 4, 6}, func(x int) bool {
+		return x%2 == 0
+	}))
+	// Output: 2
+}
