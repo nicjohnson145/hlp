@@ -218,3 +218,19 @@ func TestExtractRange(t *testing.T) {
 		)
 	})
 }
+
+func TestAny(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		require.True(t, Any([]int{1, 3, 6, 7}, func(x int) bool {
+			return x % 2 == 0
+		}))
+	})
+}
+
+func TestAll(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		require.False(t, All([]int{1, 3, 6, 7}, func(x int) bool {
+			return x % 2 == 0
+		}))
+	})
+}

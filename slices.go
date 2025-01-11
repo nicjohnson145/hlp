@@ -132,3 +132,25 @@ func ExtractRange[T any](list []T, expr string) ([]T, error) {
 
 	return newList, nil
 }
+
+// Any returns true if any element in the list matches the filter function, and false otherwise. Any will stop checking
+// after the first success
+func Any[T any](list []T, filter func(x T) bool) bool {
+	for _, elem := range list {
+		if filter(elem) {
+			return true
+		}
+	}
+	return false
+}
+
+// All returns true if all elements in the list match the filter function, and false otherwise. All will stop checking
+// after the first failure
+func All[T any](list []T, filter func(x T) bool) bool {
+	for _, elem := range list {
+		if !filter(elem) {
+			return false
+		}
+	}
+	return true
+}
