@@ -30,3 +30,23 @@ func ExampleFirst() {
 	}))
 	// Output: 2
 }
+
+func ExampleMax() {
+	fmt.Println(Max([]int{1, 3, 2, 0}))
+	// Output: 3
+}
+
+func ExampleMaxBy() {
+	fmt.Println(MaxBy([]int{1, 3, 2, 0}, func(item int, high int) bool { return item > high }))
+	// Output: 3
+}
+
+func ExampleMin() {
+	fmt.Println(Min([]int{1, 3, 2, 0}))
+	// Output: 0
+}
+
+func ExampleMinBy() {
+	fmt.Println(MinBy([]int{1, 3, 2, 0}, func(item int, low int) bool { return item < low }))
+	// Output: 0
+}

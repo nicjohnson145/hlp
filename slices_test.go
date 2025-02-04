@@ -248,3 +248,27 @@ func TestFirst(t *testing.T) {
 		}))
 	})
 }
+
+func TestMax(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		require.Equal(t, 3, Max([]int{1, 3, 2, 0}))
+	})
+}
+
+func TestMaxBy(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		require.Equal(t, 3, MaxBy([]int{1, 3, 2, 0}, func(item int, high int) bool { return item > high }))
+	})
+}
+
+func TestMin(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		require.Equal(t, 0, Min([]int{1, 3, 2, 0}))
+	})
+}
+
+func TestMinBy(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		require.Equal(t, 0, MinBy([]int{1, 3, 2, 0}, func(item int, low int) bool { return item < low }))
+	})
+}

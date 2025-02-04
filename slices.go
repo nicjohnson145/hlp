@@ -1,5 +1,9 @@
 package hlp
 
+import (
+	"cmp"
+)
+
 // FilterMapErr is like FilterMap, but the callback function can fail. In such a case, a nil slice and the error from
 // the callback is returned. This function fails fast; i.e it stops iteration at the first non-nil error
 func FilterMapErr[T any, R any](collection []T, callback func(item T, index int) (R, bool, error)) ([]R, error) {
@@ -164,4 +168,45 @@ func First[T any](list []T, filter func(x T) bool) int {
 		}
 	}
 	return -1
+}
+
+// MaxBy finds the max value in the slice using the given comparison function
+func MaxBy[T any](list []T, compare func(item T, higest T) bool) T {
+	return compareBy(list, compare)
+}
+
+// Max fins the max value in the slice by using the `>` operator
+func Max[T cmp.Ordered](list []T) T {
+	return compareBy(list, func(a, b T) bool {
+		return a > b
+	})
+}
+
+// MinBy finds the min value in the slice using the given comparison function
+func MinBy[T any](list []T, compare func(item T, lowest T) bool) T {
+	return compareBy(list, compare)
+}
+
+// Min finds the min value in the slice using the `<` operator
+func Min[T cmp.Ordered](list []T) T {
+	return compareBy(list, func(a, b T) bool {
+		return a < b
+	})
+}
+
+func compareBy[T any](list []T, compare func(a T, b T) bool) T {
+	var out T
+
+	if len(list) == 0 {
+		return out
+	}
+
+	out = list[0]
+	for _, item := range list {
+		if compare(item, out) {
+			out = item
+		}
+	}
+
+	return out
 }
