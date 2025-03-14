@@ -71,3 +71,25 @@ func Invert[K comparable, V comparable](m map[K]V) map[V]K {
 
 	return out
 }
+
+// SliceFromMap is like FilteredSliceFromMap but no filtering takes place, all entries are mapped
+func SliceFromMap[K comparable, V any, T any](m map[K]V, callback func(k K, v V) T) []T {
+	return FilteredSliceFromMap(m, func(k K, v V) (T, bool) {
+		return callback(k, v), true
+	})
+}
+
+// FilteredSliceFromMap maps the given map into a slice of type T, for all entries where the callback function returns
+// true
+func FilteredSliceFromMap[K comparable, V any, T any](m map[K]V, callback func(k K, v V) (T, bool)) []T {
+	out := []T{}
+
+	for key, val := range m {
+		got, ok := callback(key, val)
+		if ok {
+			out = append(out, got)
+		}
+	}
+
+	return out
+}

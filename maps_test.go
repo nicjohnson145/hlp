@@ -1,6 +1,7 @@
 package hlp
 
 import (
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -8,11 +9,11 @@ import (
 
 func TestMapFromSlice(t *testing.T) {
 	type thing struct {
-		ID int
+		ID   int
 		Name string
 	}
 
-	input := func() []thing{
+	input := func() []thing {
 		return []thing{
 			{ID: 1, Name: "First"},
 			{ID: 2, Name: "Second"},
@@ -21,7 +22,7 @@ func TestMapFromSlice(t *testing.T) {
 
 	t.Run("base variant", func(t *testing.T) {
 		want := map[string]thing{
-			"First": {ID: 1, Name: "First"},
+			"First":  {ID: 1, Name: "First"},
 			"Second": {ID: 2, Name: "Second"},
 		}
 
@@ -44,7 +45,7 @@ func TestMapFromSlice(t *testing.T) {
 
 		t.Run("non-error case", func(t *testing.T) {
 			want := map[string]thing{
-				"First": {ID: 1, Name: "First"},
+				"First":  {ID: 1, Name: "First"},
 				"Second": {ID: 2, Name: "Second"},
 			}
 
@@ -100,7 +101,6 @@ func TestAssign(t *testing.T) {
 	)
 }
 
-
 func TestInvert(t *testing.T) {
 	t.Run("smokes", func(t *testing.T) {
 		require.Equal(
@@ -108,5 +108,37 @@ func TestInvert(t *testing.T) {
 			map[int]string{1: "a", 2: "b"},
 			Invert(map[string]int{"a": 1, "b": 2}),
 		)
+	})
+}
+
+func TestFilteredSliceFromMap(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		input := map[string]string{
+			"a": "one",
+			"b": "two",
+			"c": "three",
+		}
+		got := FilteredSliceFromMap(input, func(key string, value string) (string, bool) {
+			return key + "|" + value, key != "c"
+		})
+		sort.Strings(got)
+
+		require.Equal(t, []string{"a|one", "b|two"}, got)
+	})
+}
+
+func TestSliceFromMap(t *testing.T) {
+	t.Run("smokes", func(t *testing.T) {
+		input := map[string]string{
+			"a": "one",
+			"b": "two",
+			"c": "three",
+		}
+		got := SliceFromMap(input, func(key string, value string) string {
+			return key + "|" + value
+		})
+		sort.Strings(got)
+
+		require.Equal(t, []string{"a|one", "b|two", "c|three"}, got)
 	})
 }
