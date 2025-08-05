@@ -142,3 +142,50 @@ func TestSliceFromMap(t *testing.T) {
 		require.Equal(t, []string{"a|one", "b|two", "c|three"}, got)
 	})
 }
+
+func TestFilteredMapFromSliceErr(t *testing.T) {
+	t.Parallel()
+
+	t.Run("smokes", func(t *testing.T) {
+		t.Parallel()
+
+		input := []string{"one", "three", "four", "six", "seven"}
+		got, err := FilteredMapFromSliceErr(input, func(item string, index int) (int, string, bool, error) {
+			return index, item, item != "seven", nil
+		})
+		require.NoError(t, err)
+		require.Equal(
+			t,
+			map[int]string{
+				0: "one",
+				1: "three",
+				2: "four",
+				3: "six",
+			},
+			got,
+		)
+	})
+}
+
+func TestFilteredMapFromSlice(t *testing.T) {
+	t.Parallel()
+
+	t.Run("smokes", func(t *testing.T) {
+		t.Parallel()
+
+		input := []string{"one", "three", "four", "six", "seven"}
+		got := FilteredMapFromSlice(input, func(item string, index int) (int, string, bool) {
+			return index, item, item != "seven"
+		})
+		require.Equal(
+			t,
+			map[int]string{
+				0: "one",
+				1: "three",
+				2: "four",
+				3: "six",
+			},
+			got,
+		)
+	})
+}

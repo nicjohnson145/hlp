@@ -3,17 +3,11 @@ package hlp
 // MapFromSliceErr is like MapFromSlice, but the callback function can fail. In such a case, a nil slice and the error from
 // the callback is returned. This function fails fast; i.e it stops iteration at the first non-nil error
 func MapFromSliceErr[T any, K comparable, V any](collection []T, callback func(item T, index int) (K, V, error)) (map[K]V, error) {
-	out := map[K]V{}
-
-	for i, item := range collection {
-		key, val, err := callback(item, i)
-		if err != nil {
-			return nil, err
-		}
-		out[key] = val
-	}
-
-	return out, nil
+	out, err := FilteredMapFromSliceErr(collection, func(item T, index int) (K, V, bool, error) {
+		key, val, err := callback(item, index)
+		return key, val, true, err
+	})
+	return out, err
 }
 
 // MapFromSlice returns a map, whose keys & values are the return values from applying the callback function to each
@@ -22,6 +16,35 @@ func MapFromSlice[T any, K comparable, V any](collection []T, callback func(item
 	out, _ := MapFromSliceErr(collection, func(item T, index int) (K, V, error) {
 		k, v := callback(item, index)
 		return k, v, nil
+	})
+	return out
+}
+
+// FilteredMapFromSliceErr returns a map whose keys and values are the return values from callback function to each
+// element of the slice, where the callback function returns true. If the callback function returns error, iteration
+// stops and the return value is a nil map and the error
+func FilteredMapFromSliceErr[T any, K comparable, V any](collection []T, callback func(item T, index int) (K, V, bool, error)) (map[K]V, error) {
+	out := map[K]V{}
+
+	for i, item := range collection {
+		key, val, ok, err := callback(item, i)
+		if err != nil {
+			return nil, err
+		}
+		if !ok {
+			continue
+		}
+		out[key] = val
+	}
+
+	return out, nil
+}
+
+// FilteredMapFromSlice is the same as FilteredMapFromSliceErr, except the callback cannot return error
+func FilteredMapFromSlice[T any, K comparable, V any](collection []T, callback func(item T, index int) (K, V, bool)) map[K]V {
+	out, _ := FilteredMapFromSliceErr(collection, func(item T, index int) (K, V, bool, error) {
+		key, val, ok := callback(item, index)
+		return key, val, ok, nil
 	})
 	return out
 }
