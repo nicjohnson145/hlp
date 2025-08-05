@@ -19,7 +19,7 @@ func MapFromSliceErr[T any, K comparable, V any](collection []T, callback func(i
 // MapFromSlice returns a map, whose keys & values are the return values from applying the callback function to each
 // element of the given slice
 func MapFromSlice[T any, K comparable, V any](collection []T, callback func(item T, index int) (K, V)) map[K]V {
-	out, _ := MapFromSliceErr[T, K, V](collection, func(item T, index int) (K, V, error) {
+	out, _ := MapFromSliceErr(collection, func(item T, index int) (K, V, error) {
 		k, v := callback(item, index)
 		return k, v, nil
 	})
