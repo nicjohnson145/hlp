@@ -41,3 +41,14 @@ func RequireExactSelectNamedCtx[T any](ctx context.Context, expected int, db sql
 
 	return rows, nil
 }
+
+// SelectCtx is exactly like SelectNamedCtx, but for quries that require no arguments
+func SelectCtx[T any](ctx context.Context, db sqlx.ExtContext, query string) ([]T, error) {
+	rows, err := db.QueryxContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("error querying: %w", err)
+	}
+	defer rows.Close()
+
+	return ScanRows[T](rows)
+}
